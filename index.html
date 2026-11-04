@@ -1,12 +1,154 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Campus Stores</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Campus Stores</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,sans-serif;background:#f6f7f9;color:#111}
+header{background:#0a7d3b;color:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center}
+header a{color:#fff;text-decoration:none;font-weight:700;font-size:18px}
+main{max-width:560px;margin:0 auto;padding:16px}
+.card{background:#fff;border-radius:12px;padding:14px;margin-bottom:12px;box-shadow:0 1px 3px #0001}
+input,select,textarea{width:100%;padding:12px;margin:6px 0;border:1px solid #ccc;border-radius:8px;font-size:16px;font-family:inherit}
+button,.btn{background:#0a7d3b;color:#fff;border:0;padding:12px 16px;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;text-decoration:none;display:inline-block}
+button.alt{background:#e6e6e6;color:#111}
+button.del{background:#c62828;padding:6px 10px;font-size:13px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.price{color:#0a7d3b;font-weight:700}
+.muted{color:#666;font-size:14px}
+.err{color:#c62828;font-size:14px;min-height:18px}
+.link{word-break:break-all;background:#eef7f1;padding:10px;border-radius:8px;font-size:14px}
+</style>
 </head>
-<body style="font-family:sans-serif;text-align:center;padding:40px">
-  <h1>Campus Stores</h1>
-  <p>Coming soon to Nsukka</p>
+<body>
+<header><a href="./">Campus Stores</a><span id="nav"></span></header>
+<main id="app">Loading...</main>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, addDoc, deleteDoc, collection, query, where, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyABVchOctQoK2u8U7Hu2r7Y8fMiWJRg_CY",
+  authDomain: "campus-stores-2b01d.firebaseapp.com",
+  projectId: "campus-stores-2b01d",
+  storageBucket: "campus-stores-2b01d.firebasestorage.app",
+  messagingSenderId: "464591723954",
+  appId: "1:464591723954:web:ce2ab6fb86e7887ebe98ab"
+};
+
+const fb = initializeApp(firebaseConfig);
+const auth = getAuth(fb);
+const db = getFirestore(fb);
+
+const $ = s => document.querySelector(s);
+const app = $("#app");
+const esc = t => String(t ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const waNum = n => { n = String(n).replace(/\D/g, ""); if (n.startsWith("0")) n = "234" + n.slice(1); return n; };
+const slugify = s => s.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+const slugParam = new URLSearchParams(location.search).get("s");
+const baseUrl = location.origin + location.pathname;
+
+onAuthStateChanged(auth, user => {
+  $("#nav").innerHTML = user ? '<button class="alt" id="lo" style="padding:6px 12px;font-size:14px">Log out</button>' : "";
+  if (user) $("#lo").onclick = () => signOut(auth).then(() => { location.href = baseUrl; });
+  if (slugParam) return showStore(slugParam);
+  user ? showDash(user) : showHome();
+});
+
+async function showStore(s) {
+  const q = await getDocs(query(collection(db, "stores"), where("slug", "==", s)));
+  if (q.empty) { app.innerHTML = '<div class="card">Store not found.</div>'; return; }
+  const st = q.docs[0], d = st.data();
+  const ps = await getDocs(query(collection(db, "products"), where("storeId", "==", st.id)));
+  const items = ps.docs.map(x => x.data()).sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+  document.title = d.name + " | Campus Stores";
+  let html = `<h2 style="margin-bottom:0">${esc(d.name)}</h2><p class="muted">${esc(d.category)} · Nsukka</p>`;
+  if (!items.length) html += '<div class="card">No products yet.</div>';
+  for (const p of items) {
+    const msg = encodeURIComponent(`Hello ${d.name}, I want to order: ${p.name} (₦${Number(p.price).toLocaleString()}). I saw it on Campus Stores.`);
+    html += `<div class="card"><div class="row"><b>${esc(p.name)}</b><span class="price">₦${esc(Number(p.price).toLocaleString())}</span></div>
+      <p class="muted">${esc(p.desc)}</p>
+      <a class="btn" href="https://wa.me/${waNum(d.whatsapp)}?text=${msg}">Order on WhatsApp</a></div>`;
+  }
+  app.innerHTML = html + '<p class="muted" style="text-align:center">Want your own store? <a href="./">Open one on Campus Stores</a></p>';
+}
+
+async function showHome() {
+  app.innerHTML = `<div class="card"><h2 style="margin-top:0">Sell on Campus Stores</h2>
+    <p class="muted">Get your own store link to share on WhatsApp. Free to start.</p>
+    <input id="em" type="email" placeholder="Email">
+    <input id="pw" type="password" placeholder="Password (6+ characters)">
+    <p class="err" id="err"></p>
+    <button id="su">Create account</button> <button class="alt" id="li">Log in</button></div>
+    <h3>Stores in Nsukka</h3><div id="list">Loading...</div>`;
+  const go = fn => async () => {
+    try { await fn(auth, $("#em").value.trim(), $("#pw").value); }
+    catch (e) { $("#err").textContent = (e.code || "error").replace("auth/", "").replace(/-/g, " "); }
+  };
+  $("#su").onclick = go(createUserWithEmailAndPassword);
+  $("#li").onclick = go(signInWithEmailAndPassword);
+  const all = await getDocs(collection(db, "stores"));
+  $("#list").innerHTML = all.empty ? '<p class="muted">No stores yet. Be the first!</p>' :
+    all.docs.map(x => { const d = x.data(); return `<a href="?s=${encodeURIComponent(d.slug)}" style="text-decoration:none;color:inherit"><div class="card"><b>${esc(d.name)}</b><div class="muted">${esc(d.category)}</div></div></a>`; }).join("");
+}
+
+async function showDash(user) {
+  const ref = doc(db, "stores", user.uid);
+  const snap = await getDoc(ref);
+  if (!snap.exists()) {
+    app.innerHTML = `<div class="card"><h2 style="margin-top:0">Create your store</h2>
+      <input id="sn" placeholder="Store name (e.g. Mama Put Kitchen)">
+      <select id="sc"><option>Food</option><option>Thrift / Fashion</option><option>Gadgets</option><option>Beauty</option><option>Services</option><option>Other</option></select>
+      <input id="sw" type="tel" placeholder="WhatsApp number (e.g. 08012345678)">
+      <p class="err" id="err"></p>
+      <button id="cs">Create store</button></div>`;
+    $("#cs").onclick = async () => {
+      const name = $("#sn").value.trim(), whatsapp = $("#sw").value.trim();
+      if (!name || waNum(whatsapp).length < 11) { $("#err").textContent = "Enter store name and a correct WhatsApp number"; return; }
+      let slug = slugify(name) || "store";
+      const taken = await getDocs(query(collection(db, "stores"), where("slug", "==", slug)));
+      if (!taken.empty) slug += "-" + Math.floor(100 + Math.random() * 900);
+      await setDoc(ref, { name, slug, whatsapp, category: $("#sc").value, ownerId: user.uid, createdAt: serverTimestamp() });
+      showDash(user);
+    };
+    return;
+  }
+  const d = snap.data();
+  const link = baseUrl + "?s=" + d.slug;
+  app.innerHTML = `<div class="card"><h2 style="margin-top:0">${esc(d.name)}</h2>
+    <p class="muted">Your store link. Share am on WhatsApp status:</p>
+    <div class="link">${esc(link)}</div><br>
+    <a class="btn" href="https://wa.me/?text=${encodeURIComponent("Shop with " + d.name + " here: " + link)}">Share on WhatsApp</a>
+    <a class="btn alt" style="background:#e6e6e6;color:#111" href="${esc(link)}">View store</a></div>
+    <div class="card"><h3 style="margin-top:0">Add a product</h3>
+    <input id="pn" placeholder="Product name">
+    <input id="pp" type="number" inputmode="numeric" placeholder="Price in Naira (e.g. 1500)">
+    <textarea id="pd" rows="2" placeholder="Short description"></textarea>
+    <p class="err" id="perr"></p>
+    <button id="ap">Add product</button></div>
+    <h3>Your products</h3><div id="plist">Loading...</div>`;
+  $("#ap").onclick = async () => {
+    const name = $("#pn").value.trim(), price = Number($("#pp").value), desc = $("#pd").value.trim();
+    if (!name || !price) { $("#perr").textContent = "Enter product name and price"; return; }
+    await addDoc(collection(db, "products"), { storeId: user.uid, name, price, desc, createdAt: serverTimestamp() });
+    $("#pn").value = $("#pp").value = $("#pd").value = ""; $("#perr").textContent = "";
+    loadProducts(user);
+  };
+  loadProducts(user);
+}
+
+async function loadProducts(user) {
+  const ps = await getDocs(query(collection(db, "products"), where("storeId", "==", user.uid)));
+  const items = ps.docs.map(x => ({ id: x.id, ...x.data() })).sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+  $("#plist").innerHTML = items.length ? items.map(p => `<div class="card row"><div><b>${esc(p.name)}</b><div class="price">₦${esc(Number(p.price).toLocaleString())}</div></div><button class="del" data-id="${p.id}">Delete</button></div>`).join("") : '<p class="muted">No products yet.</p>';
+  document.querySelectorAll(".del").forEach(b => b.onclick = async () => {
+    if (confirm("Delete this product?")) { await deleteDoc(doc(db, "products", b.dataset.id)); loadProducts(user); }
+  });
+}
+</script>
 </body>
 </html>
