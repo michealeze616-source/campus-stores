@@ -3,53 +3,139 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1646d6">
 <title>Campus Stores</title>
 <style>
+:root{--b:#1646d6;--bd:#0a2a8f;--bl:#eaf0ff;--ink:#0f1b3d;--mut:#5b6785;--bg:#f3f6fd;--wa:#25d366}
 *{box-sizing:border-box}
-body{margin:0;font-family:system-ui,sans-serif;background:#f4f5f7;color:#111}
-header{background:#0a7d3b;color:#fff;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:5}
-header a.logo{color:#fff;text-decoration:none;font-weight:800;font-size:19px}
-.pill{background:#fff;color:#0a7d3b;text-decoration:none;font-weight:700;font-size:14px;padding:8px 14px;border-radius:20px}
-main{max-width:900px;margin:0 auto;padding:12px}
-.card{background:#fff;border-radius:12px;padding:14px;margin-bottom:12px;box-shadow:0 1px 3px #0001}
-input,select,textarea{width:100%;padding:12px;margin:6px 0;border:1px solid #ccc;border-radius:8px;font-size:16px;font-family:inherit;background:#fff}
-button,.btn{background:#0a7d3b;color:#fff;border:0;padding:12px 16px;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;text-decoration:none;display:inline-block;margin:2px 0}
-.btn.alt,button.alt{background:#e6e6e6;color:#111}
-.btn.wa{background:#25d366}
-button.del{background:#c62828;padding:6px 10px;font-size:13px}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);padding-bottom:86px}
+a{color:inherit}
+header{background:#fff;position:sticky;top:0;z-index:20;box-shadow:0 1px 8px #0a2a8f14}
+.hd{max-width:1100px;margin:0 auto;padding:10px 14px;display:flex;align-items:center;gap:14px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.lg{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,#1d5cff,#0a2a8f);display:grid;place-items:center;font-size:20px}
+.lt b{display:block;color:var(--b);font-size:19px;line-height:1.1;font-weight:800}
+.lt small{color:var(--mut);font-size:11px}
+nav.top{display:none;margin-left:auto;gap:6px}
+nav.top a{text-decoration:none;font-weight:600;font-size:14px;padding:9px 14px;border-radius:20px}
+nav.top a.on{background:var(--b);color:#fff}
+.sell{margin-left:auto;background:var(--b);color:#fff;text-decoration:none;font-weight:700;font-size:14px;padding:10px 16px;border-radius:22px;white-space:nowrap}
+.bn{position:fixed;left:0;right:0;bottom:0;background:#fff;box-shadow:0 -2px 12px #0a2a8f1f;display:flex;align-items:flex-end;padding:6px 4px 8px;z-index:30}
+.bn a{flex:1;text-align:center;text-decoration:none;font-size:11px;color:var(--mut);font-weight:600}
+.bn a span{display:block;font-size:21px}
+.bn a.on{color:var(--b)}
+.bn a.plus span{width:54px;height:54px;border-radius:50%;background:var(--b);color:#fff;font-size:32px;line-height:54px;margin:-28px auto 2px;box-shadow:0 4px 14px #1646d66a}
+@media(min-width:800px){nav.top{display:flex}.sell{margin-left:0}body{padding-bottom:0}.bn{display:none}}
+main{max-width:1100px;margin:0 auto;padding:12px 14px}
+.hero{background:linear-gradient(135deg,#0a2a8f 0%,#1646d6 55%,#2f8bff 100%);color:#fff;border-radius:0 0 26px 26px;padding:26px 0 28px;position:relative;overflow:hidden}
+.hero:before{content:"";position:absolute;right:-70px;top:-70px;width:280px;height:280px;border-radius:50%;background:#ffffff14}
+.hero:after{content:"";position:absolute;left:-50px;bottom:-90px;width:220px;height:220px;border-radius:50%;background:#ffffff0f}
+.hi{max-width:1100px;margin:0 auto;padding:0 14px;display:grid;grid-template-columns:1fr 138px;grid-template-areas:"h bw" "rest rest";gap:8px 10px;align-items:center;position:relative;z-index:1}
+.h{grid-area:h}.rest{grid-area:rest}.bw{grid-area:bw;position:relative}
+.ban{width:100%;display:block;border-radius:16px;-webkit-mask-image:linear-gradient(to right,transparent 0,#000 14%);mask-image:linear-gradient(to right,transparent 0,#000 14%)}
+.hw{display:none}
+.post{display:inline-block;margin-top:14px;background:#fff;color:var(--b);font-weight:800;font-size:14px;padding:10px 18px;border-radius:22px;text-decoration:none}
+.srow{display:flex;gap:8px;align-items:center}
+.srow .search{flex:1;margin:4px 0 10px}
+.srow .btn{margin:4px 0 10px;padding:12px 16px;border-radius:26px;white-space:nowrap}
+.hero h1{font-size:31px;line-height:1.05;margin:0;font-weight:800}
+.hero h1 em{font-style:normal;color:#6fd6ff;display:block}
+.hero p{margin:0 0 16px;opacity:.93;font-size:15px;max-width:460px}
+.sb{display:flex;background:#fff;border-radius:30px;padding:5px;max-width:560px;box-shadow:0 8px 22px #0a1f5c4d}
+.sb input{border:0;margin:0;background:transparent;padding:10px 14px;font-size:15px;flex:1;min-width:0;outline:0;color:var(--ink);width:auto}
+.sb button{background:var(--b);border-radius:26px;padding:10px 20px;margin:0}
+.tr{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:14px;font-size:13px}
+.hero p{max-width:460px}
+@media(min-width:800px){.hero{padding:44px 0 48px}.hero h1{font-size:52px;margin-bottom:10px}
+.hi{grid-template-columns:1fr 450px;grid-template-areas:"h bw" "rest bw";gap:0 24px}
+.ban{border-radius:24px;-webkit-mask-image:linear-gradient(to right,transparent 0,#000 18%);mask-image:linear-gradient(to right,transparent 0,#000 18%)}
+.hw{display:block;position:absolute;left:30px;top:12px;transform:rotate(-6deg);font-family:"Segoe Script","Bradley Hand","Brush Script MT",cursive;font-size:19px;font-weight:700;color:#fff;text-shadow:0 2px 8px #0007}}
+.sec{display:flex;justify-content:space-between;align-items:center;margin:20px 0 10px}
+.sec h2{margin:0;font-size:20px;font-weight:800;color:var(--bd)}
+.sec a{color:var(--b);font-weight:700;font-size:14px;text-decoration:none}
+.cats{display:grid;grid-auto-flow:column;grid-auto-columns:96px;gap:10px;overflow-x:auto;padding-bottom:6px}
+@media(min-width:800px){.cats{grid-auto-flow:row;grid-auto-columns:auto;grid-template-columns:repeat(9,1fr)}}
+.ct{background:#fff;border:1px solid #e1e9ff;border-radius:16px;padding:12px 4px;text-align:center;text-decoration:none;font-size:12.5px;font-weight:600;box-shadow:0 1px 4px #0a2a8f12}
+.ct span{display:block;font-size:30px;margin-bottom:4px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media(min-width:800px){.grid{grid-template-columns:repeat(4,1fr);gap:16px}}
+.pc{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 8px #0a2a8f14;position:relative}
+.pc>a{text-decoration:none;display:block}
+.pc img,.ph{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:#e6ecfb}
+.tag{position:absolute;top:8px;left:8px;background:#16a34a;color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:12px}
+.im{position:relative}
+.cnt{position:absolute;left:8px;bottom:8px;background:#000a;color:#fff;font-size:11px;padding:3px 8px;border-radius:10px}
+.hrt{position:absolute;top:8px;right:8px;width:34px;height:34px;border-radius:50%;background:#fff;border:0;padding:0;margin:0;font-size:18px;line-height:34px;color:#b3bdd6;box-shadow:0 1px 5px #0003;cursor:pointer}
+.hrt.on{color:#e11d48}
+.pi{padding:10px 12px 12px}
+.pn{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pr{font-size:18px;font-weight:800;color:var(--bd);margin:2px 0}
+.pl{display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:12px;color:var(--mut)}
+.pl i{font-style:normal;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vd{background:var(--b);color:#fff;font-size:12px;font-weight:700;padding:7px 11px;border-radius:14px;white-space:nowrap}
+.pro{display:grid;gap:12px;margin:24px 0 8px}
+@media(min-width:800px){.pro{grid-template-columns:repeat(3,1fr)}}
+.pb{border-radius:18px;padding:18px;color:#fff;background:linear-gradient(135deg,#1646d6,#0a2a8f)}
+.pb.l{background:#e1eaff;color:var(--ink)}
+.pb.d{background:linear-gradient(135deg,#0a2a8f,#071a5c)}
+.pb h3{margin:0 0 4px;font-size:18px}
+.pb p{margin:0 0 12px;font-size:13px;opacity:.92}
+.pb a{display:inline-block;background:#fff;color:var(--b);font-weight:700;font-size:13px;padding:9px 15px;border-radius:16px;text-decoration:none}
+.pb.l a{background:var(--b);color:#fff}
+footer{background:var(--bd);color:#dbe5ff;margin-top:26px;padding:22px 0 30px;font-size:13px}
+.fi{max-width:1100px;margin:0 auto;padding:0 14px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 24px;align-items:center}
+footer b{color:#fff;font-size:18px}
+footer a{color:#dbe5ff;text-decoration:none;margin-right:14px}
+.card{background:#fff;border-radius:14px;padding:14px;margin-bottom:12px;box-shadow:0 1px 5px #0a2a8f12}
+input,select,textarea{width:100%;padding:12px;margin:6px 0;border:1px solid #cfd9f5;border-radius:10px;font-size:16px;font-family:inherit;background:#fff;color:var(--ink)}
+button,.btn{background:var(--b);color:#fff;border:0;padding:12px 18px;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block;margin:2px 0}
+.btn.alt,button.alt{background:#e1eaff;color:var(--b)}
+.btn.wa{background:var(--wa);color:#fff}
+button.del{background:#dc2626;padding:6px 10px;font-size:13px}
 button:disabled{opacity:.6}
 .row{display:flex;justify-content:space-between;align-items:center;gap:8px}
-.muted{color:#666;font-size:14px}
-.err{color:#c62828;font-size:14px;min-height:18px}
-.link{word-break:break-all;background:#eef7f1;padding:10px;border-radius:8px;font-size:14px}
-.search{border-radius:24px;padding:12px 16px;margin:0 0 10px}
+.muted{color:var(--mut);font-size:14px}
+.err{color:#dc2626;font-size:14px;min-height:18px}
+.link{word-break:break-all;background:var(--bl);padding:10px;border-radius:10px;font-size:14px}
+.search{border-radius:26px;padding:13px 18px;margin:4px 0 10px}
 .chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:10px}
-.chip{background:#fff;color:#111;border:1px solid #ddd;border-radius:20px;padding:8px 14px;font-size:14px;white-space:nowrap;margin:0}
-.chip.on{background:#0a7d3b;color:#fff;border-color:#0a7d3b}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-@media(min-width:700px){.grid{grid-template-columns:repeat(4,1fr)}}
-.pc{background:#fff;border-radius:10px;overflow:hidden;text-decoration:none;color:inherit;box-shadow:0 1px 3px #0001;display:block}
-.pc img,.ph{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:#e9ecef}
-.pi{padding:8px 10px}
-.pr{color:#0a7d3b;font-weight:800}
-.pn{font-size:14px;margin:2px 0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ps{font-size:12px;color:#777}
-.big{width:100%;max-height:420px;object-fit:contain;background:#000;border-radius:12px;display:block}
-.pc{position:relative}
-.bd{position:absolute;top:6px;right:6px;background:#000a;color:#fff;font-size:12px;padding:2px 8px;border-radius:10px}
-.gal{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;border-radius:12px;background:#000}
+.chip{background:#fff;color:var(--ink);border:1px solid #d6e0fb;border-radius:20px;padding:8px 14px;font-size:14px;white-space:nowrap;margin:0;font-weight:600}
+.chip.on{background:var(--b);color:#fff;border-color:var(--b)}
+.gal{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;border-radius:16px;background:#0b1330}
 .gal img{flex:0 0 100%;width:100%;max-height:420px;object-fit:contain;scroll-snap-align:center}
 .thumbs{display:flex;gap:6px;overflow-x:auto;margin-top:8px}
 .thumbs img{width:56px;height:56px;object-fit:cover;border-radius:8px;flex:0 0 auto;cursor:pointer}
 .previews{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0}
 .pv{position:relative;width:76px;height:76px}
 .pv img{width:100%;height:100%;object-fit:cover;border-radius:8px}
-.pv .x{position:absolute;top:-6px;right:-6px;background:#c62828;color:#fff;border:0;border-radius:50%;width:22px;height:22px;padding:0;font-size:14px;line-height:22px;margin:0}
+.pv .x{position:absolute;top:-6px;right:-6px;background:#dc2626;color:#fff;border:0;border-radius:50%;width:22px;height:22px;padding:0;font-size:14px;line-height:22px;margin:0}
 </style>
 </head>
 <body>
-<header><a class="logo" href="./">Campus Stores</a><span id="nav"></span></header>
+<header><div class="hd">
+  <a class="logo" href="./"><span class="lg">🛍️</span><span class="lt"><b>Campus Stores</b><small>Nsukka's student marketplace</small></span></a>
+  <nav class="top">
+    <a data-k="home" href="./">🏠 Home</a>
+    <a data-k="browse" href="?browse=1">🔎 Browse</a>
+    <a data-k="fav" href="?fav=1">♥ Favorites</a>
+    <a data-k="acct" href="?a=1">👤 Account</a>
+  </nav>
+  <a class="sell" href="?a=1#post">+ Sell Item</a>
+</div></header>
+<div id="hero"></div>
 <main id="app">Loading...</main>
+<footer><div class="fi">
+  <div><b>🛍️ Campus Stores</b><div>Nsukka's student marketplace. Free to sell.</div></div>
+  <div id="fl"><a href="./">Home</a><a href="?browse=1">Browse</a><a href="?a=1">Sell</a></div>
+  <div>© 2026 Campus Stores</div>
+</div></footer>
+<div class="bn">
+  <a data-k="home" href="./"><span>🏠</span>Home</a>
+  <a data-k="browse" href="?browse=1"><span>🔎</span>Browse</a>
+  <a class="plus" href="?a=1#post"><span>+</span>Sell Item</a>
+  <a data-k="fav" href="?fav=1"><span>♥</span>Favorites</a>
+  <a data-k="acct" href="?a=1"><span>👤</span>Account</a>
+</div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
@@ -65,7 +151,10 @@ const firebaseConfig = {
   appId: "1:464591723954:web:ce2ab6fb86e7887ebe98ab"
 };
 const CLOUD = "ghqv22zf", PRESET = "campus_unsigned";
-const CATS = ["Food", "Fashion", "Gadgets", "Beauty", "Services", "Other"];
+// Put YOUR support WhatsApp number here, like "2348012345678" (leave empty to hide)
+const SUPPORT_WA = "";
+const CATS = [["Phones","📱"],["Gadgets","💻"],["Fashion","👗"],["Food","🍲"],["Beauty","💄"],["Services","🛠️"],["Hostel & Home","🛋️"],["Books","📚"],["Other","🛍️"]];
+const CAT_NAMES = CATS.map(c => c[0]);
 
 const fb = initializeApp(firebaseConfig);
 const auth = getAuth(fb);
@@ -85,6 +174,19 @@ const okImg = u => typeof u === "string" && u.startsWith("https://res.cloudinary
 const thumb = u => okImg(u) ? u.replace("/upload/", "/upload/w_400,h_400,c_fill,q_auto,f_auto/") : "";
 const bigImg = u => okImg(u) ? u.replace("/upload/", "/upload/w_900,q_auto,f_auto/") : "";
 const byNew = (a, b) => (b.createdAt?.seconds || 9e12) - (a.createdAt?.seconds || 9e12);
+const isNew = p => p.createdAt?.seconds && (Date.now() / 1000 - p.createdAt.seconds) < 3 * 86400;
+const favGet = () => { try { return JSON.parse(localStorage.getItem("cs_fav") || "[]"); } catch (e) { return []; } };
+const favSet = a => { try { localStorage.setItem("cs_fav", JSON.stringify(a)); } catch (e) {} };
+
+document.addEventListener("click", e => {
+  const b = e.target.closest(".hrt");
+  if (!b) return;
+  const id = b.dataset.id;
+  let a = favGet();
+  a = a.includes(id) ? a.filter(x => x !== id) : [...a, id];
+  favSet(a);
+  b.classList.toggle("on");
+});
 
 async function compress(file, max = 900) {
   const bmp = await createImageBitmap(file);
@@ -104,36 +206,75 @@ async function uploadImage(file) {
   return j.secure_url;
 }
 
-const card = p => `<a class="pc" href="?p=${encodeURIComponent(p.id)}">
-  ${okImg(p.imageUrl) ? `<img loading="lazy" src="${esc(thumb(p.imageUrl))}" alt="">` : '<div class="ph"></div>'}
-  ${(p.images?.length || 0) > 1 ? `<span class="bd">📷 ${p.images.length}</span>` : ""}
-  <div class="pi"><div class="pr">₦${esc(fmt(p.price))}</div><div class="pn">${esc(p.name)}</div><div class="ps">${esc(p.storeName || "")}</div></div></a>`;
+const card = p => {
+  const fav = favGet().includes(p.id);
+  const n = p.images?.length || 0;
+  return `<div class="pc"><a href="?p=${encodeURIComponent(p.id)}">
+    <div class="im">${okImg(p.imageUrl) ? `<img loading="lazy" src="${esc(thumb(p.imageUrl))}" alt="">` : '<div class="ph"></div>'}
+    ${n > 1 ? `<span class="cnt">📷 ${n}</span>` : ""}</div>
+    ${isNew(p) ? '<span class="tag">New</span>' : ""}
+    <div class="pi"><div class="pn">${esc(p.name)}</div><div class="pr">₦${esc(fmt(p.price))}</div>
+    <div class="pl"><i>📍 Nsukka${p.storeName ? " · " + esc(p.storeName) : ""}</i><span class="vd">View →</span></div></div></a>
+    <button class="hrt ${fav ? "on" : ""}" data-id="${esc(p.id)}" aria-label="Save">♥</button></div>`;
+};
 
-onAuthStateChanged(auth, u => {
-  me = u;
-  $("#nav").innerHTML = `<a class="pill" href="?a=1">${u ? "My store" : "Sell / Login"}</a>`;
-  route();
-});
+function setNav(k) {
+  document.querySelectorAll("[data-k]").forEach(a => a.classList.toggle("on", a.dataset.k === k));
+}
+
+onAuthStateChanged(auth, u => { me = u; route(); });
 
 function route() {
-  if (P.get("p")) return showProduct(P.get("p"));
-  if (P.get("s")) return showStore(P.get("s"));
-  if (P.get("a")) return showAccount();
-  showHome();
+  $("#hero").innerHTML = "";
+  if (P.get("p")) { setNav(""); return showProduct(P.get("p")); }
+  if (P.get("s")) { setNav(""); return showStore(P.get("s")); }
+  if (P.get("a")) { setNav("acct"); return showAccount(); }
+  if (P.get("fav")) { setNav("fav"); return showFav(); }
+  if (P.get("browse") || P.get("q") || P.get("c")) { setNav("browse"); return showBrowse(); }
+  setNav("home"); showHome();
 }
 
 /* ---------- HOME ---------- */
 async function showHome() {
-  app.innerHTML = `<input id="q" class="search" placeholder="Search products in Nsukka...">
+  $("#hero").innerHTML = `<section class="hero"><div class="hi">
+    <div class="h"><h1>Buy. Sell.<em>Link up.</em></h1></div>
+    <div class="bw"><img class="ban" src="banner.jpg" alt="" onerror="this.parentNode.style.display='none'"><span class="hw">Your campus plug!</span></div>
+    <div class="rest">
+    <p>Discover great deals, sell your items and connect with students across Nsukka.</p>
+    <form class="sb" method="get"><input name="q" placeholder="Search items (e.g. phone, shoes, jollof...)" autocomplete="off"><button>Search</button></form>
+    <div class="tr"><span>✅ Free to sell</span><span>⚡ Order on WhatsApp</span><span>🎓 Made for Nsukka students</span></div>
+    <a class="post" href="?a=1#post">+ Post a listing</a>
+    </div></div></section>`;
+  const help = SUPPORT_WA ? `<a href="https://wa.me/${esc(SUPPORT_WA)}">Contact us</a>` : "";
+  app.innerHTML = `<div class="sec"><h2>Browse Categories</h2><a href="?browse=1">View All →</a></div>
+    <div class="cats">${CATS.map(([n, i]) => `<a class="ct" href="?c=${encodeURIComponent(n)}"><span>${i}</span>${esc(n)}</a>`).join("")}</div>
+    <div class="sec"><h2>🔥 Fresh Listings</h2><a href="?browse=1">View All →</a></div>
+    <div id="grid" class="grid">Loading...</div>
+    <div class="pro">
+      <div class="pb"><h3>Open your store free</h3><p>Get your own link to share on WhatsApp status.</p><a href="?a=1">Start selling →</a></div>
+      <div class="pb l"><h3>Shop safely</h3><p>Meet on campus and check the item before you pay.</p>${help}</div>
+      <div class="pb d"><h3>Join our vendors</h3><p>Create an account and add your first product in minutes.</p><a href="?a=1">Create account →</a></div>
+    </div>`;
+  if (SUPPORT_WA) $("#fl").innerHTML += `<a href="https://wa.me/${esc(SUPPORT_WA)}">WhatsApp us</a>`;
+  try {
+    const snap = await getDocs(query(collection(db, "products"), orderBy("createdAt", "desc"), limit(8)));
+    const items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    $("#grid").innerHTML = items.length ? items.map(card).join("") : '<p class="muted">No products yet. Be the first to sell!</p>';
+  } catch (e) { $("#grid").innerHTML = '<p class="err">Could not load products. Check your network.</p>'; }
+}
+
+/* ---------- BROWSE ---------- */
+async function showBrowse() {
+  let cat = P.get("c") || "All", items = [];
+  app.innerHTML = `<div class="srow"><input id="q" class="search" placeholder="Search products in Nsukka..." value="${esc(P.get("q") || "")}"><a class="btn" href="?a=1#post">+ Post</a></div>
     <div class="chips" id="chips"></div><div id="grid" class="grid">Loading...</div>`;
-  let items = [], cat = "All";
   const draw = () => {
     const q = $("#q").value.toLowerCase().trim();
     const list = items.filter(p => (cat === "All" || p.category === cat) && (!q || (p.name + " " + (p.storeName || "")).toLowerCase().includes(q)));
     $("#grid").innerHTML = list.length ? list.map(card).join("") : '<p class="muted">No products found yet.</p>';
   };
   const chips = () => {
-    $("#chips").innerHTML = ["All", ...CATS].map(c => `<button class="chip ${c === cat ? "on" : ""}" data-c="${c}">${c}</button>`).join("");
+    $("#chips").innerHTML = ["All", ...CAT_NAMES].map(c => `<button class="chip ${c === cat ? "on" : ""}" data-c="${esc(c)}">${esc(c)}</button>`).join("");
     document.querySelectorAll(".chip").forEach(b => b.onclick = () => { cat = b.dataset.c; chips(); draw(); });
   };
   chips();
@@ -143,6 +284,16 @@ async function showHome() {
     items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     draw();
   } catch (e) { $("#grid").innerHTML = '<p class="err">Could not load products. Check your network.</p>'; }
+}
+
+/* ---------- FAVORITES ---------- */
+async function showFav() {
+  const ids = favGet();
+  app.innerHTML = `<div class="sec"><h2>♥ Favorites</h2></div><div id="grid" class="grid">Loading...</div>`;
+  if (!ids.length) { $("#grid").outerHTML = '<div class="card">No favorites yet. Tap the ♥ on any product to save it here. Favorites are saved on this phone.</div>'; return; }
+  const docs = await Promise.all(ids.slice(0, 40).map(id => getDoc(doc(db, "products", id))));
+  const items = docs.filter(d => d.exists()).map(d => ({ id: d.id, ...d.data() }));
+  $("#grid").innerHTML = items.length ? items.map(card).join("") : '<p class="muted">Those products are no longer available.</p>';
 }
 
 /* ---------- PRODUCT ---------- */
@@ -159,9 +310,9 @@ async function showProduct(id) {
     ${imgs.length ? `<div class="gal" id="gal">${imgs.map(u => `<img src="${esc(bigImg(u))}" alt="">`).join("")}</div>
     ${imgs.length > 1 ? `<div class="muted" id="cnt" style="text-align:center;margin-top:6px">1 / ${imgs.length} · swipe for more</div><div class="thumbs">${imgs.map((u, i) => `<img data-i="${i}" src="${esc(thumb(u))}" alt="">`).join("")}</div>` : ""}` : ""}
     <div class="card" style="margin-top:10px">
-      <div class="pr" style="font-size:22px">₦${esc(fmt(p.price))}</div>
+      <div class="pr" style="font-size:24px">₦${esc(fmt(p.price))}</div>
       <h2 style="margin:4px 0">${esc(p.name)}</h2>
-      <p class="muted">${esc(p.category || "")} · Nsukka</p>
+      <p class="muted">${esc(p.category || "")} · 📍 Nsukka</p>
       <p>${esc(p.desc)}</p>
       ${s.whatsapp ? `<a class="btn wa" href="https://wa.me/${waNum(s.whatsapp)}?text=${msg}">Order on WhatsApp</a>
       <a class="btn alt" href="tel:+${waNum(s.whatsapp)}">Call</a>` : ""}
@@ -183,7 +334,7 @@ async function showStore(slug) {
   const items = ps.docs.map(x => ({ id: x.id, ...x.data() })).sort(byNew);
   document.title = d.name + " | Campus Stores";
   app.innerHTML = `<p><a href="./">← Back</a></p>
-    <div class="card"><h2 style="margin:0">${esc(d.name)}</h2><p class="muted">${esc(d.category)} · Nsukka</p>
+    <div class="card"><h2 style="margin:0">${esc(d.name)}</h2><p class="muted">${esc(d.category)} · 📍 Nsukka</p>
     <a class="btn wa" href="https://wa.me/${waNum(d.whatsapp)}">Chat on WhatsApp</a></div>
     <div class="grid">${items.length ? items.map(card).join("") : '<p class="muted">No products yet.</p>'}</div>`;
 }
@@ -215,7 +366,7 @@ async function showDash(user) {
   if (!snap.exists()) {
     app.innerHTML = `<div class="card"><h2 style="margin-top:0">Create your store</h2>
       <input id="sn" placeholder="Store name (e.g. Mama Put Kitchen)">
-      <select id="sc">${CATS.map(c => `<option>${c}</option>`).join("")}</select>
+      <select id="sc">${CAT_NAMES.map(c => `<option>${esc(c)}</option>`).join("")}</select>
       <input id="sw" type="tel" placeholder="WhatsApp number (e.g. 08012345678)">
       <p class="err" id="err"></p>
       <button id="cs">Create store</button></div>`;
@@ -237,18 +388,19 @@ async function showDash(user) {
     <div class="link">${esc(link)}</div><br>
     <a class="btn wa" href="https://wa.me/?text=${encodeURIComponent("Shop with " + d.name + " here: " + link)}">Share on WhatsApp</a>
     <a class="btn alt" href="${esc(link)}">View store</a></div>
-    <div class="card"><h3 style="margin-top:0">Add a product</h3>
+    <div class="card" id="post"><h3 style="margin-top:0">Post a listing</h3>
     <input id="pf" type="file" accept="image/*" multiple>
     <p class="muted" id="pcount"></p>
     <div class="previews" id="prevs"></div>
     <input id="pn" placeholder="Product name">
     <input id="pp" type="number" inputmode="numeric" placeholder="Price in Naira (e.g. 1500)">
-    <select id="pc">${CATS.map(c => `<option ${c === d.category ? "selected" : ""}>${c}</option>`).join("")}</select>
+    <select id="pc">${CAT_NAMES.map(c => `<option ${c === d.category ? "selected" : ""}>${esc(c)}</option>`).join("")}</select>
     <textarea id="pd" rows="2" placeholder="Short description"></textarea>
     <p class="err" id="perr"></p>
-    <button id="ap">Add product</button></div>
+    <button id="ap">Post listing</button></div>
     <h3>Your products</h3><div id="plist">Loading...</div>
     <p><button class="alt" id="lo">Log out</button></p>`;
+  if (location.hash === "#post") $("#post").scrollIntoView();
   $("#lo").onclick = () => signOut(auth).then(() => { location.href = baseUrl; });
   let files = [];
   const drawPrev = () => {
@@ -277,7 +429,7 @@ async function showDash(user) {
       $("#pn").value = $("#pp").value = $("#pd").value = ""; files = []; drawPrev();
       loadProducts(user);
     } catch (e) { $("#perr").textContent = "Failed: " + (e.message || "try again"); }
-    btn.disabled = false; btn.textContent = "Add product";
+    btn.disabled = false; btn.textContent = "Post listing";
   };
   loadProducts(user);
 }
